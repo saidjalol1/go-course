@@ -44,4 +44,15 @@ func main(){
 
 	StreamReceive(streamChan)
 
+
+	// buffered channel
+	bufferedChan := make(chan int, 3)
+	bufferedChan <- 12
+	bufferedChan <- 45
+	bufferedChan <- 78
+
+	fmt.Println(<-bufferedChan)
+	fmt.Println(<-bufferedChan)
+	fmt.Println(<-bufferedChan)
+
 }
