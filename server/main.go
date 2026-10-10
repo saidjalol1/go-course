@@ -12,6 +12,12 @@ type MessageResponce struct {
 	Content string `json:"content"`
 }
 
+type Task struct {
+	ID string `json:"id"`
+	Title string `json:"title"`
+	Description string `json:"description"`
+}
+
 func main() {
 
 	serveMux := http.NewServeMux()
@@ -34,6 +40,31 @@ func main() {
 		json.NewEncoder(w).Encode(response)
 	})
 
+	serveMux.HandleFunc("POST /new-task/", func(w http.ResponseWriter, r *http.Request) {
+
+		var newTask Task
+
+		err := json.NewDecoder(r.Body).Decode(&newTask)
+		if err != nil{
+			w.Header().Set("Content-type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			responce := map[string]string{"message":"Invalid json body"}
+			json.NewEncoder(w).Encode(responce)
+		}
+
+		fmt.Println("Successfully created new task !")
+
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+
+		response := map[string]any{
+			"status":  "success",
+			"message": "Task created successfully",
+			"data":    newTask,
+		}
+		json.NewEncoder(w).Encode(response)
+
+	})
 
 	// Start the server
 	fmt.Println("Server is running at http://localhost:8080")
