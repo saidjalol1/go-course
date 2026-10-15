@@ -21,6 +21,9 @@ func main(){
 
 	server := gin.New()
 	server.Use(config.MyLoggerMiddleware())
+	server.Use(config.CutomMiddleware1())
+	server.Use(config.CutomMiddleware2())
+	server.Use(config.CutomMiddleware3())
 	server.GET("/", routers.Welcome)
 
 
